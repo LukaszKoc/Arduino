@@ -6,17 +6,15 @@ decode_results results;
 
 class IRController {
 	private:
-		void setup();
 	public:
+		void setup();
 		int readIRInputCode();
 		void handleIrInput(int inputCode);
 		IRController() {
-			setup();
 		}
 }; 
 
 void IRController::setup() {
-	Serial.begin(9600);
 	irrecv.enableIRIn();
 	irrecv.blink13(true);
 }

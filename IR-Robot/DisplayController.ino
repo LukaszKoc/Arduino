@@ -8,12 +8,11 @@ LiquidCrystal lcd(LCD_rs, LCD_en, LCD_d4, LCD_d5, LCD_d6, LCD_d7);
 
 class DisplayController {
 	private:
-		void setup();
 	public:
+		void setup();
 		void displayMessage(String message, int x = 0, int y = 0);
 		void clear();
 		DisplayController() {
-			setup();
 		}
 }; 
 

@@ -12,33 +12,36 @@
 #include <InputXYS.ino>
 #include <JoyStickController.ino>
 
-
-
 IRController iRController;
 DisplayController displayController;
 Constants constants;
 JoyStickController joyStick;
+ServoController servoController;
 
-InputXYS joyInput;
 
 void setup() {
-	Serial.begin(9600);
+	Serial.begin(115200);
+	constants.setup();
+	iRController.setup();
+	displayController.setup();
+	joyStick.setup();
+	servoController.setup();
+	Serial.print("\n\nREDY\n");
 }
 
 void loop() {
-	joyInput.setX(1);
-	joyInput.setY(2), 
-	joyInput.setS(3);
-	Serial.print("X= " + joyInput.getX());
-	Serial.print("Y= " + joyInput.getY());
-	Serial.print("S= " + joyInput.getS());
-	joyInput.setX(4);
-	joyInput.setY(5), 
-	joyInput.setS(6);
-	Serial.print("X= " + joyInput.getX());
-	Serial.print("Y= " + joyInput.getY());
-	Serial.print("S= " + joyInput.getS());
+	int x, y, s;
 
-	joyStick.readInput(&joyInput);
-	String inputCommand = constants.mapIRCode(iRController.readIRInputCode());
+	x = joyStick.readX();
+ 	y = joyStick.readY();
+	s = joyStick.readS();
+		Serial.print("S:");
+		Serial.print(s);
+		Serial.print("; \tX:");
+		Serial.print(x);
+		Serial.print("; \tY:");
+		Serial.print(y);
+		Serial.print("\n");
+		servoController.moveToPosition(x/4);	
+		delay(100);
 }
