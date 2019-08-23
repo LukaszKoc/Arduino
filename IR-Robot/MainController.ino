@@ -1,34 +1,21 @@
-
 #include <IRremote.h>
+#include <IRremoteInt.h>
+#include <ir_Lego_PF_BitStreamEncoder.h>
+#include <LiquidCrystal.h>
 #include <SoftwareSerial.h>
-#include <TM1637Display.h>
 
-#include "IRController.ino"
-#include "DisplayController.ino"
-
-const int RECV_PIN = 7;
-IRrecv irrecv(RECV_PIN);
-decode_results results;
+#include <DisplayController.ino>
+#include <IRController.ino>
+#include <Constants.ino>
 
 IRController iRController;
 DisplayController displayController;
+Constants constants;
 
 void setup() {
-	Serial.begin(9600);
-	irrecv.enableIRIn();
-	irrecv.blink13(true);
+
 }
 
 void loop() {
-	iRController.handleIrInput(readIRInputCode());
+	String inputCommand = constants.mapIRCode(iRController.readIRInputCode());
 }
-
-int readIRInputCode () {
-	int inputCode = -1;
-	 if (irrecv.decode(&results)) {
-		inputCode =	results.value;
-		irrecv.resume();
-	}
-	return inputCode;
-} 
-
