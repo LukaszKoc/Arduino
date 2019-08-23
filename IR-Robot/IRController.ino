@@ -1,13 +1,11 @@
 #ifndef IRController_h
 #define IRController_h 
 
-const int RECV_PIN = 7;
-IRrecv irrecv(RECV_PIN);
+IRrecv irrecv(IR_RECV_PIN);
 decode_results results;
 
 class IRController {
 	private:
-		void iRInputActionPerformner(int inputCode);
 		void setup();
 	public:
 		int readIRInputCode();

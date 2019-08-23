@@ -4,8 +4,7 @@
 #ifndef DisplayController_h
 #define DisplayController_h 
 
-const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+LiquidCrystal lcd(LCD_rs, LCD_en, LCD_d4, LCD_d5, LCD_d6, LCD_d7);
 
 class DisplayController {
 	private:
