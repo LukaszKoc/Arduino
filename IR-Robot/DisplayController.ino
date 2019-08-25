@@ -4,7 +4,7 @@
 #ifndef DisplayController_h
 #define DisplayController_h 
 
-LiquidCrystal lcd(LCD_rs, LCD_en, LCD_d4, LCD_d5, LCD_d6, LCD_d7);
+LiquidCrystal lcd(LCD_RS_PIN, LCD_EN_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
 class DisplayController {
 	private:

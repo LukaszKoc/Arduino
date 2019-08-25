@@ -8,16 +8,18 @@ class ServoController {
 	int currentPosition = 10;
 	int min = 5;
 	int max = 175;
+	int inputPin;
 	public:
 	void setup();
 	void moveToPosition(int newPosition);
 	void moveByArc(int arc);
-	ServoController() {
+	ServoController(int inputPin_arg) {
+		inputPin = inputPin_arg;
 	}
 }; 
 
 void ServoController::setup() {
-	myservo.attach(SERVO_INPUT); // attaches the servo on pin 9 to the servo object
+	myservo.attach(inputPin); // attaches the servo on pin 9 to the servo object
 	moveToPosition(currentPosition);
 }
 

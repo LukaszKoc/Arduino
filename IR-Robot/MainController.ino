@@ -11,13 +11,17 @@
 #include <ServoController.ino>
 #include <InputXYS.ino>
 #include <JoyStickController.ino>
+#include <JoyStickController.ino>
+#include <MotorController.ino>
 
+
+Constants constants;
 IRController iRController;
 DisplayController displayController;
-Constants constants;
-JoyStickController joyStick;
-ServoController servoController;
-
+JoyStickController joyStick(JS_X_A_PIN, JS_Y_A_PIN, JS_SW_PIN);
+ServoController servoController(SERVO_INPUT);
+MotorController motor1Controller(MOTOR_1_SPREED_A_PIN, MOTOR_1_TURN_1_PIN, MOTOR_1_TURN_2_PIN);
+MotorController motor2Controller(MOTOR_2_SPREED_A_PIN, MOTOR_2_TURN_1_PIN, MOTOR_2_TURN_2_PIN);
 
 void setup() {
 	Serial.begin(115200);
@@ -26,6 +30,8 @@ void setup() {
 	displayController.setup();
 	joyStick.setup();
 	servoController.setup();
+	motor1Controller.setup();
+	motor2Controller.setup();
 	Serial.print("\n\nREDY\n");
 }
 
