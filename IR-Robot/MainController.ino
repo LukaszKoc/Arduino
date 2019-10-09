@@ -1,65 +1,64 @@
 #include <Pins.ino>
+#include <Constants.ino>
 #include <SoftwareSerial.h>
 #include <IRremote.h>
 #include <IRremoteInt.h>
 #include <LiquidCrystal.h>
 #include <Servo.h>
 
-#include <DisplayController.ino>
-#include <IRController.ino>
-#include <Constants.ino>
-#include <ServoController.ino>
-#include <InputXYS.ino>
-#include <JoyStickController.ino>
-#include <JoyStickController.ino>
+// #include <DisplayController.ino>
+// #include <IRController.ino>
+// #include <Constants.ino>
+// #include <ServoController.ino>
+#include <ArduinoUtilController.ino>
 #include <MotorController.ino>
+#include <JoyStickController.ino>
+#include <CarController.ino>
+#include <TankDriverController.ino>
 
-
-Constants constants;
-IRController iRController;
-DisplayController displayController;
+// Constants constants;
+// IRController iRController;
+// DisplayController displayController;
+// ServoController servoController(SERVO_INPUT);
+ArduinoUtilController util;
 JoyStickController joyStick(JS_X_A_PIN, JS_Y_A_PIN, JS_SW_PIN);
-ServoController servoController(SERVO_INPUT);
-MotorController motor1Controller(MOTOR_1_SPREED_A_PIN, MOTOR_1_TURN_1_PIN, MOTOR_1_TURN_2_PIN);
-MotorController motor2Controller(MOTOR_2_SPREED_A_PIN, MOTOR_2_TURN_1_PIN, MOTOR_2_TURN_2_PIN);
+MotorController motorLeftController(MOTOR_2_SPREED_A_PIN, MOTOR_2_TURN_1_PIN, MOTOR_2_TURN_2_PIN);
+MotorController motorRightController(MOTOR_1_SPREED_A_PIN, MOTOR_1_TURN_1_PIN, MOTOR_1_TURN_2_PIN);
+CarController carController(motorLeftController,motorRightController);
+TankDriverController tankDriver(motorLeftController,motorRightController);
+
 
 void setup() {
-	 Serial.begin(115200);
-	// iRController.setup();
-	// displayController.setup();
-	// servoController.setup();
+
+	Serial.begin(115200);
 	joyStick.setup();
-	motor1Controller.setup();
-	motor2Controller.setup();
+	motorLeftController.setup();
+	motorRightController.setup();
 	Serial.print("\n\nREDY\n");
 }
 
+int x, y, z;
 void loop() {
-	int x, y, s;
-	x = joyStick.readX();
-  	y = joyStick.readY();
-	x = x-500;
-  	y = y-500;
-  	x = x/2;
-	y = y/2;
-	    Serial.print("\n");
-		Serial.print(" X:");
-		Serial.print(x);
-		Serial.print(" \tY:");
-		Serial.print(y);
-	motor1Controller.setSpeed(x);
-	motor2Controller.setSpeed(y);
-	
-		delay(100);
-	// int x, y, s;
-	
-	// s = joyStick.readS();
-	// 	Serial.print("S:");
-	// 	Serial.print(s);
-	// 	Serial.print("; \tX:");
-	// 	Serial.print(x);
-	// 	Serial.print("; \tY:");
-	// 	Serial.print(y);
-	// 	Serial.print("\n");
-	// 	servoController.moveToPosition(x/4);	
+	readJoystick(x, y, z);
+	 // display(x, y);
+	tankDriver.drive(x, y);
+	util.endLoop(100);
 }
+
+void readJoystick(int &x, int &y, int &z) {
+	y = joyStick.readY();
+	x = joyStick.readX();
+	z = joyStick.readS();
+}
+
+void display(int x, int y, int z = -1) {
+	Serial.print(x);
+	Serial.print(";\t");
+	Serial.print(y);
+	if(z != -1) {
+		Serial.print(";\t");
+		Serial.print(z);
+	}
+}
+
+

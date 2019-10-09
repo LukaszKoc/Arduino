@@ -4,6 +4,7 @@
 class JoyStickController {
 	private:
 		int xPin, yPin, sPin;
+		ArduinoUtilController util;
 	public:
 		void setup();
 		int readX();
@@ -22,13 +23,15 @@ void JoyStickController::setup() {
 }
 
 int JoyStickController::readX() {
-	return analogRead(xPin);
+	// return analogRead(xPin);
+	return map(analogRead(xPin), 0, 1023, 0, 520) - 255;
 }
 int JoyStickController::readY() {
-	return analogRead(yPin); 
+	// return analogRead(yPin);
+	return map(analogRead(yPin), 0, 1023, 0, 520) - 255; 
 }
 int JoyStickController::readS() {
-	return digitalRead(sPin);
+	return - digitalRead(sPin);
 }
 
 #endif

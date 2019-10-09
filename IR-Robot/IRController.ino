@@ -15,8 +15,8 @@ class IRController {
 }; 
 
 void IRController::setup() {
-	irrecv.enableIRIn();
 	irrecv.blink13(true);
+	irrecv.enableIRIn();
 }
 
 int IRController::readIRInputCode() {
