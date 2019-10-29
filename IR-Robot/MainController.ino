@@ -27,38 +27,59 @@ MotorController motorRightController(MOTOR_1_SPREED_A_PIN, MOTOR_1_TURN_1_PIN, M
 CarController carController(motorLeftController,motorRightController);
 TankDriverController tankDriver(motorLeftController,motorRightController);
 
+	void setup() {
 
-void setup() {
-
-	Serial.begin(115200);
-	joyStick.setup();
-	motorLeftController.setup();
-	motorRightController.setup();
-	Serial.print("\n\nREDY\n");
-}
-
-int x, y, z;
-void loop() {
-	readJoystick(x, y, z);
-	 // display(x, y);
-	tankDriver.drive(x, y);
-	util.endLoop(100);
-}
-
-void readJoystick(int &x, int &y, int &z) {
-	y = joyStick.readY();
-	x = joyStick.readX();
-	z = joyStick.readS();
-}
-
-void display(int x, int y, int z = -1) {
-	Serial.print(x);
-	Serial.print(";\t");
-	Serial.print(y);
-	if(z != -1) {
-		Serial.print(";\t");
-		Serial.print(z);
+		Serial.begin(115200);
+		joyStick.setup();
+		motorLeftController.setup();
+		motorRightController.setup();
+		Serial.print("\n\nREDY\n");
 	}
-}
 
+	int x, y, z;
+	void loop() {
+		readJoystick(x, y, z);
+		tankDriver.drive(x, y);
+		displayPins();
+		
+		util.endLoop(50);
+	}
 
+	void readJoystick(int &x, int &y, int &z) {
+		y = joyStick.readY();
+		x = joyStick.readX();
+		z = joyStick.readS();
+	}
+
+	void display(int x, int y, int z = -1) {
+		Serial.print(x);
+		Serial.print(";\t");
+		Serial.print(y);
+		if(z != -1) {
+			Serial.print(";\t");
+			Serial.print(z);
+		}
+	}
+
+	void displayPins(){
+		Serial.print("\n");
+		Serial.print(digitalRead(MOTOR_1_TURN_1_PIN));
+		Serial.print("\t");
+		Serial.print("MOTOR_1_TURN_1_PIN\n");
+		Serial.print(digitalRead(MOTOR_1_TURN_2_PIN));
+		Serial.print("\t");
+		Serial.print("MOTOR_1_TURN_2_PIN\n");
+		Serial.print(analogRead(MOTOR_1_SPREED_A_PIN));
+		Serial.print("\t");
+		Serial.print("MOTOR_1_SPREED_A_PIN\n\n");
+
+		Serial.print(digitalRead(MOTOR_2_TURN_1_PIN));
+		Serial.print("\t");
+		Serial.print("MOTOR_2_TURN_1_PIN\n");
+		Serial.print(digitalRead(MOTOR_2_TURN_2_PIN));
+		Serial.print("\t");
+		Serial.print("MOTOR_2_TURN_2_PIN\n");
+		Serial.print(analogRead(MOTOR_2_SPREED_A_PIN));
+		Serial.print("\t");
+		Serial.print("MOTOR_2_SPREED_A_PIN\n");
+	}

@@ -24,30 +24,31 @@ class MotorController {
 
 
 void MotorController::setSpeed(int speed) {
-	changeDirection(speed<0);
+	changeDirection(speed > 0);
+
 	speed = abs(speed);
-	
 	if(speed < 50) {
 		stop();
-		return;
+	} else if(speed > 255) {
+		speed = 255;
 	}
-	if(speed>255) {
-		analogWrite(speed_pin, 255);
-		return;
-	}
+
 	analogWrite(speed_pin, speed); // Any value between 0 and 255
 }
 
 void MotorController::stop() {
-		digitalWrite(input1, LOW);
-		digitalWrite(input2, LOW);
+	analogWrite(speed_pin, 0);
+	digitalWrite(input1, LOW);
+	digitalWrite(input2, LOW);
 }
 void MotorController::changeDirection(boolean isForward) {
 	
 	if(isForward) {
+	Serial.print(" ");
 		digitalWrite(input1, HIGH);
 		digitalWrite(input2, LOW);
 	} else {
+	Serial.print("-");
 		digitalWrite(input1, LOW);
 		digitalWrite(input2, HIGH);
 	}

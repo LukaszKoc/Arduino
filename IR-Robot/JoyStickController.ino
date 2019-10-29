@@ -23,11 +23,9 @@ void JoyStickController::setup() {
 }
 
 int JoyStickController::readX() {
-	// return analogRead(xPin);
 	return map(analogRead(xPin), 0, 1023, 0, 520) - 255;
 }
 int JoyStickController::readY() {
-	// return analogRead(yPin);
 	return map(analogRead(yPin), 0, 1023, 0, 520) - 255; 
 }
 int JoyStickController::readS() {

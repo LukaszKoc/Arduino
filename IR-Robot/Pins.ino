@@ -17,9 +17,9 @@
 #define IR_RECV_PIN 3
 
 //JOISTICKController
-#define JS_X_A_PIN 0 // analog pin connected to X output
-#define JS_Y_A_PIN 1 // analog pin connected to Y output
-#define JS_SW_PIN 2 // digital pin connected to switch output
+#define JS_X_A_PIN 2 // analog pin connected to X output
+#define JS_Y_A_PIN 3 // analog pin connected to Y output
+#define JS_SW_PIN  4// digital pin connected to switch output
  
 //ServoController
 #define SERVO_INPUT 9
