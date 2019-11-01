@@ -15,6 +15,7 @@
 #include <JoyStickController.ino>
 #include <CarController.ino>
 #include <TankDriverController.ino>
+#include <DistnceReaderController.ino>
 
 // Constants constants;
 // IRController iRController;
@@ -22,6 +23,7 @@
 // ServoController servoController(SERVO_INPUT);
 ArduinoUtilController util;
 JoyStickController joyStick(JS_X_A_PIN, JS_Y_A_PIN, JS_SW_PIN);
+DistnceReaderController bat(BAT_TRIG_PIN, BAT_ECHO_PIN);
 MotorController motorLeftController(MOTOR_2_SPREED_A_PIN, MOTOR_2_TURN_1_PIN, MOTOR_2_TURN_2_PIN);
 MotorController motorRightController(MOTOR_1_SPREED_A_PIN, MOTOR_1_TURN_1_PIN, MOTOR_1_TURN_2_PIN);
 CarController carController(motorLeftController,motorRightController);
@@ -30,18 +32,13 @@ TankDriverController tankDriver(motorLeftController,motorRightController);
 	void setup() {
 
 		Serial.begin(115200);
-		joyStick.setup();
-		motorLeftController.setup();
-		motorRightController.setup();
+		bat.setup();
 		Serial.print("\n\nREDY\n");
 	}
 
 	int x, y, z;
 	void loop() {
-		readJoystick(x, y, z);
-		tankDriver.drive(x, y);
-		displayPins();
-		
+		Serial.print(bat.readDistance());
 		util.endLoop(50);
 	}
 

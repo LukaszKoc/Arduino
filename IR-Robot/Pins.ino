@@ -5,6 +5,10 @@
 * this uses the undocumented feature of Arduino - pins 14-19 correspond to analog 0-5
 ****************************************************************************************/
 
+//DistnceReaderController
+#define BAT_TRIG_PIN 12
+#define BAT_ECHO_PIN 11
+
 //DisplayController
 #define LCD_RS_PIN 12
 #define LCD_EN_PIN 11
