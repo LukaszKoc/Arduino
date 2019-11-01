@@ -23,6 +23,8 @@ class TankDriverController {
 
 void TankDriverController::drive(int x, int y) {
 	int speedRight, speedLeft;
+
+	Serial.print("\n\t\t");
 	y = map(y, 0, 255, 0, 100);
 	// display(x, y);
 	
@@ -52,7 +54,7 @@ void TankDriverController::drive(int x, int y) {
 		speedLeft = map(speedLeft, 0, max(speedRight, speedLeft), 0, 250);
 		speedRight = map(speedRight, 0, max(speedRight, speedLeft), 0, 250);
 	}
-	display(speedLeft, speedRight);
+//	display(speedLeft, speedRight);
 
 	//LED test
 	motorLeft.setSpeed(speedLeft);
