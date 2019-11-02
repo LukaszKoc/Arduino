@@ -8,6 +8,7 @@
 #include <CarController.ino>
 #include <TankDriverController.ino>
 #include <DistanceReaderController.ino>
+#include <BuzzController.ino>
 
 ArduinoUtilController util;
 JoyStickController joyStick(JS_X_A_PIN, JS_Y_A_PIN, JS_SW_PIN);
@@ -15,15 +16,29 @@ MotorController motorLeftController(MOTOR_2_SPREED_A_PIN, MOTOR_2_TURN_1_PIN, MO
 MotorController motorRightController(MOTOR_1_SPREED_A_PIN, MOTOR_1_TURN_1_PIN, MOTOR_1_TURN_2_PIN);
 CarController carController(motorLeftController,motorRightController);
 TankDriverController tankDriver(motorLeftController,motorRightController);
-DistanceReaderController bat;
-
+DistanceReaderController bat(BAT_TRIG_PIN, BAT_ECHO_PIN);
+BuzzController buzz(BUZZER_PIN);
+long  turn;
 	void setup() {
-		Serial.begin(115200);
+		buzz.setup();
+		bat.setup();
+		randomSeed(analogRead(0));  
+		Serial.begin(9600);
 		Serial.print("\n\nREDY\n");
 	}
 
 	void loop() {
-		Serial.println(bat.readDistance());
+		tankDriver.drive(200, 0);
+		int distanceCm = bat.readDistance();
+		Serial.println(distanceCm);
+
+		if(distanceCm > 0 && distanceCm < 10) {
+			buzz.buzz(distanceCm * 500);
+			turn = random(-250, 500);
+			tankDriver.drive(-100, turn);
+			delay(1000);
+			buzz.stop();
+		}
 		util.endLoop(200);
 	}
 
@@ -65,3 +80,4 @@ DistanceReaderController bat;
 		Serial.print("\t");
 		Serial.print("MOTOR_2_SPREED_A_PIN\n");
 	}
+

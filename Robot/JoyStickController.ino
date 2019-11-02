@@ -4,7 +4,6 @@
 class JoyStickController {
 	private:
 		int xPin, yPin, sPin;
-		ArduinoUtilController util;
 	public:
 		void setup();
 		int readX();

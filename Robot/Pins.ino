@@ -6,8 +6,11 @@
 ****************************************************************************************/
 
 //DistanceReaderController
-#define BAT_TRIG_PIN 11
-#define BAT_ECHO_PIN 12
+#define BAT_TRIG_PIN 12
+#define BAT_ECHO_PIN 11
+
+//Buzzer
+#define BUZZER_PIN 4
 
 //DisplayController
 #define LCD_RS_PIN 12
@@ -30,9 +33,9 @@
 
 
 //MOTOR 
-#define MOTOR_1_SPREED_A_PIN 9
-#define MOTOR_1_TURN_1_PIN 10
-#define MOTOR_1_TURN_2_PIN 11 
+#define MOTOR_1_SPREED_A_PIN 10
+#define MOTOR_1_TURN_1_PIN 9
+#define MOTOR_1_TURN_2_PIN 8 
 //MOTOR 2
 #define MOTOR_2_SPREED_A_PIN 5
 #define MOTOR_2_TURN_1_PIN 6

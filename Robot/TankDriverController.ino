@@ -12,7 +12,7 @@ class TankDriverController {
 		String calculateDirection(int arq);
 		void display(int x, int y, int z = -1);
 	public:
-		void drive(int speed, int arq);
+		void drive(int x, int y);
 		TankDriverController(MotorController _motorLeft, MotorController _motorRight, boolean _singleJoystickMode = true) {
 			motorLeft = _motorLeft;
 			motorRight = _motorRight;

@@ -1,29 +1,34 @@
-#include <NewPing.h>
-
 #ifndef DistanceReaderController_h
 #define DistanceReaderController_h 
 
-#define MAX_DISTANCE 400
-NewPing sonar(BAT_TRIG_PIN, BAT_ECHO_PIN, MAX_DISTANCE);
+#define HC_RC_ROUNDTRIP_CM 58
 
 class DistanceReaderController {
 	private:
+		int triggerPin, echoPin;
 	public:
-		void setup();
 		int readDistance();
-		DistanceReaderController() {}
+		void setup();
+		DistanceReaderController(int triggerPin_arg, int echoPin_arg) {
+			triggerPin = triggerPin_arg;
+			echoPin = echoPin_arg;	
+		}
 }; 
 
-void DistanceReaderController::setup() {
-	pinMode(BAT_TRIG_PIN, OUTPUT); //Pin, do którego podłączymy trig jako wyjście
+void  DistanceReaderController::setup() {
+	pinMode(triggerPin, OUTPUT); //Konfiguracja pinu 13 jako wyjście
+	pinMode(echoPin, INPUT); //Konfiguracja pinu 13 jako wyjście
+
 }
 
 int DistanceReaderController::readDistance() {
-	unsigned int distance = sonar.ping();
-	pinMode(BAT_ECHO_PIN, OUTPUT);
-	digitalWrite(BAT_ECHO_PIN, LOW);
-	pinMode(BAT_ECHO_PIN, INPUT);
+	long czas, dystans;
+	digitalWrite(triggerPin, LOW);
+	delayMicroseconds(2);
+	digitalWrite(triggerPin, HIGH);
+	delayMicroseconds(10);
+	digitalWrite(triggerPin, LOW);
 
-	return  distance / US_ROUNDTRIP_CM;
+	return pulseIn(echoPin, HIGH) / HC_RC_ROUNDTRIP_CM;
 }
 #endif

@@ -17,7 +17,4 @@ int ArduinoUtilController::mathAbs(int input) {
 	if(input < 0){ return -input;}
 	return input;
 }
-
-
-
 #endif
