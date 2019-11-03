@@ -10,6 +10,8 @@
 #include <DistanceReaderController.ino>
 #include <BuzzController.ino>
 
+#include "index.html" //Our HTML webpage contents
+
 ArduinoUtilController util;
 JoyStickController joyStick(JS_X_A_PIN, JS_Y_A_PIN, JS_SW_PIN);
 MotorController motorLeftController(MOTOR_2_SPREED_A_PIN, MOTOR_2_TURN_1_PIN, MOTOR_2_TURN_2_PIN);
@@ -23,12 +25,14 @@ long  turn;
 		buzz.setup();
 		bat.setup();
 		randomSeed(analogRead(0));  
-		Serial.begin(9600);
+		Serial.begin(115200);
 		Serial.print("\n\nREDY\n");
 	}
 
 	void loop() {
 		tankDriver.drive(200, 0);
+		String s = MAIN_page; //Read HTML contents
+		Serial.println(s);
 		int distanceCm = bat.readDistance();
 		Serial.println(distanceCm);
 
@@ -39,7 +43,7 @@ long  turn;
 			delay(1000);
 			buzz.stop();
 		}
-		util.endLoop(200);
+		util.endLoop(20000);
 	}
 
 	void readJoystick(int &x, int &y, int &z) {
