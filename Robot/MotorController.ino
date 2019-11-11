@@ -31,6 +31,7 @@ void MotorController::setSpeed(int speed) {
 		speed = 255;
 	}
 
+	display(speed);
 	analogWrite(speed_pin, speed); // Any value between 0 and 255
 }
 

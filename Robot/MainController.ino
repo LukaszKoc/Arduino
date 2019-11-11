@@ -30,20 +30,19 @@ long  turn;
 	}
 
 	void loop() {
-		tankDriver.drive(200, 0);
-		String s = MAIN_page; //Read HTML contents
-		Serial.println(s);
+		tankDriver.drive(500, 0);
 		int distanceCm = bat.readDistance();
 		Serial.println(distanceCm);
 
 		if(distanceCm > 0 && distanceCm < 10) {
-			buzz.buzz(distanceCm * 500);
+			buzz.buzz(distanceCm * 100);
 			turn = random(-250, 500);
 			tankDriver.drive(-100, turn);
 			delay(1000);
 			buzz.stop();
 		}
-		util.endLoop(20000);
+		displayPins();
+		util.endLoop(2000);
 	}
 
 	void readJoystick(int &x, int &y, int &z) {

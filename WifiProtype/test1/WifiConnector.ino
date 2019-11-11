@@ -5,20 +5,23 @@ WiFiServer server(80);
 
 class WifiConnector {
 	private:
-		WiFiClient client;
 		int httpCode;
 		String header;
+		String path;
 		String responseDoc;
 		unsigned long currentTime = millis();
 		unsigned long previousTime = 0; 
 		long timeoutTime = 2000;
 		String getResponseStatus(int code);
 	public:
+		WiFiClient client;
 		void connect(char* ssid, char* password);
 		void setup();
 		void activate();
 		String getHeader();
+		String getPath();
 		void doResponce();
+		void doResponce(int status);
 		WifiConnector(String response_arg, int httpCode_arg, long timeoutTime_arg) {
 			responseDoc = response_arg;
 			httpCode = httpCode_arg;
@@ -33,14 +36,12 @@ class WifiConnector {
 void WifiConnector::setup() {
 
 }
-String WifiConnector::getHeader() {
-	return header;
-}
+
 void WifiConnector::activate() {
 	client = server.available();	 // Listen for incoming clients
-
+	header = "";
 	if (client) {										// If a new client connects,
-		Serial.println("New Client.");					// print a message out in the serial port
+		// Serial.println("New Client.");					// print a message out in the serial port
 		String currentLine = "";								// make a String to hold incoming data from the client
 		currentTime = millis();
 		previousTime = currentTime;
@@ -48,10 +49,15 @@ void WifiConnector::activate() {
 			currentTime = millis();				 
 			if (client.available()) {						 // if there's bytes to read from the client,
 				char c = client.read();						 // read a byte, then
-				Serial.write(c);										// print it out the serial monitor
+				// Serial.write(c);										// print it out the serial monitor
 				header += c;
 				if (c == '\n') {										// if the byte is a newline character
 					if (currentLine.length() == 0) {
+						if (header.indexOf("GET") >= 0) {
+		  					doResponce();					
+						} else {
+							doResponce(200);
+						}
 						break;
 					} else { // if you got a newline, then clear currentLine
 						currentLine = "";
@@ -65,17 +71,25 @@ void WifiConnector::activate() {
 }
 
 void  WifiConnector::doResponce() {
-	client.println(getResponseStatus(httpCode));  
-	client.println(responseDoc); 
-	client.stop();
-	Serial.println("Client disconnected.\n\n");
+	if (client) {
+		client.println(getResponseStatus(httpCode));  
+		client.println(responseDoc); 
+		client.stop();
+	}
+}
+
+void  WifiConnector::doResponce(int status) {
+	if (client) {
+		client.println(getResponseStatus(status));  
+		client.stop();
+	}
 }
 
 
 String WifiConnector::getResponseStatus(int code) {
 	return 	"HTTP/1.1 " + String(code) + " OK\n"+
 			"Content-type:text/html\n"+
-			"Connection: close\n\n";
+			"Connection: Keep-Alive\n\n";
 }
 
 
@@ -95,4 +109,10 @@ void WifiConnector::connect(char* ssid, char* password) {
   server.begin();
 }
 
+String WifiConnector::getHeader() {
+	return header;
+}
+
+String WifiConnector::getPath() {
+	return path;}
 #endif

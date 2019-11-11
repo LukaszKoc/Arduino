@@ -16,6 +16,7 @@ class BuzzController {
 
 void BuzzController::setup() {
       pinMode(buzzPin, OUTPUT);
+      noTone(buzzPin);     // Stop sound...
 }
 
 int BuzzController::buzz(int toneHz = 1000) {
