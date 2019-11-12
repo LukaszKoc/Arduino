@@ -12,6 +12,8 @@
 char* ssid     = "UPCCF2D79F";
 char* password = "N2nrcsz2fxbb";
 
+int x, y;
+
 // Set web server port number to 80
 #import "index.h"
 // const char responceHtml [] PROGMEM = "#include 'index.html'";
@@ -54,8 +56,8 @@ void requestCallback(String header) {
     Serial.println("header: ");
     Serial.println( header);
 
-    int x = midString(header, "x=", "&").toInt();
-    int y = midString(header, "y=", " ").toInt();
+    x = midString(header, "x=", "&").toInt();
+    y = midString(header, "y=", " ").toInt();
     Serial.print("result: " );
     Serial.print(y );
     Serial.print(" - " );
