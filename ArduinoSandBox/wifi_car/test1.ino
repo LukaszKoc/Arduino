@@ -8,7 +8,6 @@
 #include <Regexp.h>
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-
 #include <WifiConnector.ino>
 #include <Pins.ino>
 #include <ArduinoUtilController.ino>
@@ -16,40 +15,36 @@
 #include <TankDriverController.ino>
 
 ArduinoUtilController util;
-MotorController motorLeftController( MOTOR_2_TURN_1_PIN, MOTOR_2_TURN_2_PIN);
-MotorController motorRightController( MOTOR_1_TURN_1_PIN, MOTOR_1_TURN_2_PIN);
+MotorController motorLeftController(MOTOR_2_TURN_1_PIN, MOTOR_2_TURN_2_PIN);
+MotorController motorRightController(MOTOR_1_TURN_1_PIN, MOTOR_1_TURN_2_PIN);
 TankDriverController tankDriver(motorLeftController,motorRightController);
-
 
 // Replace with your network credentials
 char* ssid     = "UPCCF2D79F";
 char* password = "N2nrcsz2fxbb";
-int x, y, oldX, oldY;
+int x, y;
+int tillStop = 1;
 
 #import "index.h"
 WifiConnector wifiConnector( setResponseHtmlDoc() );
 
 void setup() {
-  digitalWrite(MOTOR_1_SPREED_A_PIN, HIGH);
-  digitalWrite(MOTOR_2_SPREED_A_PIN, HIGH);
   Serial.begin(115200);
+  motorLeftController.setup();
+  motorRightController.setup();
+  tankDriver.stop();
+  tankDriver.setup();
   wifiConnector.connect(ssid, password);
-  tankDriver.drive(0, 0);
 }
 
 void loop() {
   wifiConnector.activate();
   String headerData = wifiConnector.getRequest();
-
-  if (headerData != NULL && headerData.indexOf("joystickCoords") != -1) {
-        requestCallback(headerData);
-       x = map(x, 0, 100, 0, 1024);
-       y = map(y, 0, 100, 0, 1024);
-    }
-    tankDriver.drive(x, y);
-    oldX = x;
-    oldY = y;
-    util.endLoop(500);
+  if(headerData != NULL && headerData.indexOf("joystickCoords") != -1) {
+    requestCallback(headerData);
+    tankDriver.drive(y, x);
+  }
+  util.endLoop(200);
 }
 
 String setResponseHtmlDoc() {
@@ -62,7 +57,7 @@ void requestCallback(String header) {
   y = midString(header, "y=", " ").toInt();
   Serial.print("result: " );
   Serial.print(y );
-  Serial.print(" - " );
+  Serial.print("  " );
   Serial.print(y );
   Serial.println();
 }

@@ -393,6 +393,6 @@ const char * javascriptCode ="<head>\n"
 "\t 	\t 	\t 	\t 	}\n"
 "\t 	\t 	\t 	\t 	prevX = newX;\n"
 "\t 	\t 	\t 	\t 	prevY = newY;\n"
-"\t 	\t 	\t 	}, 25/60 * 1000);\n"
+"\t 	\t 	\t 	}, 20/60 * 1000);\n"
 "\t 	\t 	</script>\n"
 "</html>";
