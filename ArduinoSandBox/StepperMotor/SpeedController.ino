@@ -1,33 +1,53 @@
 #ifndef SpeedController_h
 #define SpeedController_h 
 
-int pulsesChanged, pulses, encoderA, encoderB;
+/**
+* distance - total distance driven in cm
+* avgSpeed - avg speed in m/s
+* currentSpeed = current speed in m/s 
+**/
+
+
+float MilisecPercentimeters;
+float currentSpeed, distance, totalTime;
+volatile unsigned long previousMillis = 0;
+volatile unsigned long milisNow = 0;
+int pulsesChanged, pulses, pulsesTotal, encoderA, encoderB;
+
 class SpeedController {
 	private:
-		int interruptPin, last, maxSpeed;
+		int stepsPerMeter;
+    float avgSpeed, maxSpeed;
 		int read();
 		static void redSencores();
 	public:
-		void setup();
-		void doRead();		
-		SpeedController(int sencor1_arg, int sencor2_arg) {
-			interruptPin = sencor1_arg;
-			encoderA = sencor1_arg; 
-			encoderB = sencor2_arg;
-		}
+    void setup();
+		void setup(int sencor1_arg, int sencor2_arg, int stepsPerMeter_arg = 1200);
+		float getSpeed();		
+    SpeedController(int sencor1_arg, int sencor2_arg, int stepsPerMeter_arg = 1200) {
+      encoderA = sencor1_arg; 
+      encoderB = sencor2_arg;
+      stepsPerMeter = stepsPerMeter_arg;
+    }
+    SpeedController() {
+    }
 }; 
 
-void SpeedController::setup() {
+void SpeedController::setup(int sencor1_arg, int sencor2_arg, int stepsPerMeter_arg) {
   pinMode(encoderA, INPUT);
   digitalWrite(encoderB, HIGH);
-  pinMode(interruptPin, INPUT_PULLUP);
-  attachInterrupt(0, redSencores, CHANGE);
+  pinMode(encoderA, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(encoderA), redSencores, CHANGE);
 }
 
-void SpeedController::doRead() {
+void SpeedController::setup( ) {
+ setup(encoderA, encoderB, stepsPerMeter);
+}
+
+float SpeedController::getSpeed() {
 	if (pulsesChanged != 0) {
 		pulsesChanged = 0;
-		Serial.println(pulses);
+    return currentSpeed;
 	}
 }
 
@@ -48,6 +68,36 @@ static void SpeedController::redSencores() {
       pulses--; // Moving forward
     }
   }
+  if( pulses == 12 || pulses == -12)  {
+    distance += 0.01;
+    milisNow = millis();
+    float ten = 10;
+    MilisecPercentimeters = (milisNow - previousMillis);
+    if(MilisecPercentimeters > 500) {
+      Serial.println("reset");
+      previousMillis =  millis();
+      pulsesTotal += pulses;
+      pulses = 0;
+      return;
+    }
+    totalTime += MilisecPercentimeters;
+    previousMillis = milisNow;
+    currentSpeed = 0.01 /(MilisecPercentimeters/1000);
+    Serial.print(pulsesTotal);
+    Serial.print("\t\t\t");
+    Serial.print(distance);
+    Serial.print("\t\t\t");
+    Serial.print(totalTime);
+    Serial.print(" ms");
+    Serial.print("\t\t\t");
+    Serial.print(currentSpeed);
+    Serial.print(" m/s");
+    Serial.println();
+    pulsesTotal += pulses;
+    pulses = 0;
+  }
+
+
   pulsesChanged = 1;
 }
 

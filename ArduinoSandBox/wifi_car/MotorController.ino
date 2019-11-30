@@ -2,7 +2,7 @@
 #define MotorController_h 
 #define HIGH 1024
 #define LOW 0
-#define DC_FREQUENCY 10000
+#define DC_FREQUENCY 50
 
 class MotorController {
 	private:
@@ -35,7 +35,6 @@ void MotorController::setSpeed(int speed) {
 	if(speed < 100) {
 		return;
 	}
-	display(speed);
 	drive(direction, speed); //max speed Arduino: 255 ESP:1024
 }
 

@@ -1,3 +1,4 @@
+
 /*********
   Rui Santos
   Complete project details at https://randomnerdtutorials.com  
@@ -5,7 +6,6 @@
 
 // Load Wi-Fi library
 #include <ESP8266WiFi.h>
-#include <Regexp.h>
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 #include <WifiConnector.ino>
@@ -44,7 +44,7 @@ void loop() {
     requestCallback(headerData);
     tankDriver.drive(y, x);
   }
-  util.endLoop(200);
+  util.endLoop(0);
 }
 
 String setResponseHtmlDoc() {

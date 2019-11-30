@@ -6,28 +6,25 @@
 #define ENVIRONMENT "arduino"
 
 #include <ArduinoUtilController.ino>
+#include <SpeedController.ino>
 #include <MotorController.ino>
 #include <JoyStickController.ino>
-#include <SpeedController.ino>
 
 ArduinoUtilController util;
 JoyStickController joyStick(JS_X_A_PIN, JS_Y_A_PIN, JS_SW_PIN);
-MotorController motorLeftController(MOTOR_2_TURN_1_PIN, MOTOR_2_TURN_2_PIN);
-SpeedController speedController(MOTOR_HYALL_1_PIN, MOTOR_HYALL_2_PIN);	
+MotorController motorLeftController(MOTOR_1_TURN_1_PIN, MOTOR_1_TURN_2_PIN, MOTOR_1_HYALL_1_PIN, MOTOR_1_HYALL_2_PIN);
+MotorController motorrighttController(MOTOR_2_TURN_1_PIN, MOTOR_2_TURN_2_PIN, MOTOR_2_HYALL_1_PIN, MOTOR_2_HYALL_2_PIN);
 	void setup() {
 		Serial.begin(115200);
 		joyStick.setup();
 		motorLeftController.setup();
-		speedController.setup();
+		motorrighttController.setup();
 		Serial.print("\n\nREDY\n");
 	}
 	int x, y, z;
 	void loop() {
-		speedController.doRead();
 		readJoystick(x, y, z);
-		if(x < 0) {
-			x = 0;
-		}
+		motorrighttController.setSpeed(x);
 		motorLeftController.setSpeed(x);
 		// util.endLoop();
 	}
@@ -52,8 +49,6 @@ SpeedController speedController(MOTOR_HYALL_1_PIN, MOTOR_HYALL_2_PIN);
 		Serial.println();
 		Serial.print("\t");
 		Serial.print("MOTOR_HYALL_2_PIN\n");
-		Serial.print(digitalRead(MOTOR_HYALL_1_PIN));
 		Serial.print("\t");
-		Serial.print("MOTOR_HYALL_1_PIN\n");
-		Serial.print(digitalRead(MOTOR_HYALL_2_PIN));
+		Serial.print(digitalRead(MOTOR_2_HYALL_2_PIN));
 	}

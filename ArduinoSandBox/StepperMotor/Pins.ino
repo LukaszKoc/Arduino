@@ -31,12 +31,15 @@
 
 //MOTOR 
 #define MOTOR_1_TURN_1_PIN 9
-#define MOTOR_1_TURN_2_PIN 8 
-//MOTOR 2
-#define MOTOR_2_TURN_1_PIN 9
-#define MOTOR_2_TURN_2_PIN 10
+#define MOTOR_1_TURN_2_PIN 10
+	//HALL
+	#define MOTOR_1_HYALL_1_PIN 2
+	#define MOTOR_1_HYALL_2_PIN 4
 
-//HALL
-#define MOTOR_HYALL_1_PIN 2
-#define MOTOR_HYALL_2_PIN 3
+//MOTOR 2
+#define MOTOR_2_TURN_1_PIN 5
+#define MOTOR_2_TURN_2_PIN 6
+	//HALL
+	#define MOTOR_2_HYALL_1_PIN 3
+	#define MOTOR_2_HYALL_2_PIN 7
 
