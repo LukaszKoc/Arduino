@@ -1,8 +1,6 @@
 #ifndef MotorController_h
 #define MotorController_h 
-#define HIGH 1024
-#define LOW 0
-#define DC_FREQUENCY 50
+#define DC_FREQUENCY 64
 
 class MotorController {
 	private:
@@ -44,12 +42,11 @@ void MotorController::stop() {
 }
 
 void MotorController::drive(boolean isForward, int speed = 1024) {
+	stop();
 	if(isForward) {
-	Serial.print(" ");
 		analogWrite(input1, speed);
 		analogWrite(input2, LOW);
 	} else {
-	Serial.print("-");
 		analogWrite(input1, LOW);
 		analogWrite(input2, speed);
 	}

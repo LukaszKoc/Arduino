@@ -30,7 +30,7 @@ void TankDriverController::drive(int y, int x) {
 	stop();
 	delay(5);	
 
-	print(y, x);
+	// print(y, x);
 	
 	int speedRight, speedLeft;
 	speedLeft = y;
@@ -58,12 +58,11 @@ void TankDriverController::drive(int y, int x) {
 			speedRight = -100;
 		}
 
-  Serial.println();
 	
 	speedLeft = map(speedLeft, 0, 100, 0, 1024);
 	speedRight = map(speedRight, 0, 100, 0, 1024);
 
-	print(speedLeft, speedRight);
+	// print(speedLeft, speedRight);
 	motorLeft.setSpeed(speedLeft);
 	motorRight.setSpeed(speedRight);
 }

@@ -1,10 +1,17 @@
+#include <ESP8266WiFi.h>
+
 #ifndef WifiConnector_h
 #define WifiConnector_h 
 #define port 80
 WiFiServer server(port);
+//TODO create connection List htstName/pass/IPs
+IPAddress staticIP(192, 168, 0, 140); //ESP static ip
+IPAddress gateway(192, 168, 0, 1);   //IP Address of your WiFi Router (Gateway)
+IPAddress subnet(255, 255, 255, 0);  //Subnet mask
 
 class WifiConnector {
 	private:
+		float speedL, speedR;
 		int httpCode, host;
 		String req;
 		String path;
@@ -13,14 +20,18 @@ class WifiConnector {
 		unsigned long previousTime = 0; 
 		long timeoutTime = 2000;
 		String getResponseStatus(int code);
+		void configWiFi();
 	public:
 		WiFiClient client;
+		void openAccessPoint();
 		void connect(char* ssid, char* password);
 		void setup();
 		void activate();
 		String getRequest();
 		String getPath();
 		void doResponce();
+		void setSpeedLeft(float spped);
+		void setSpeedRight(float spped);
 		void doResponce(int status);
 		WifiConnector(String response_arg, int httpCode_arg, long timeoutTime_arg) {
 			responseDoc = response_arg;
@@ -34,8 +45,8 @@ class WifiConnector {
 }; 
 
 void WifiConnector::setup() {
-
 }
+
 
 void WifiConnector::activate() {
 	client = server.available();
@@ -68,10 +79,15 @@ void  WifiConnector::doResponce() {
 
 void  WifiConnector::doResponce(int status) {
 	if (client) {
-		client.println(getResponseStatus(status));  
+		client.println(getResponseStatus(status)); 
+		client.print("{"); 
+		client.print("speedL:"); 
+		client.print(speedL); 
+		client.print(", speedR:"); 
+		client.print(speedR); 
+		client.print("}\n\n"); 
 	}
 }
-
 
 String WifiConnector::getResponseStatus(int code) {
 	return 	"HTTP/1.1 " + String(code) + " OK\n"+
@@ -80,27 +96,50 @@ String WifiConnector::getResponseStatus(int code) {
 }
 
 
+void WifiConnector::openAccessPoint() {
+	Serial.println("Setting soft-AP ... ");
+	WiFi.hostname("robot-wifi");
+  	WiFi.mode(WIFI_AP_STA);
+	boolean result = 
+		WiFi.softAPConfig(staticIP, gateway, subnet) && 
+		WiFi.softAP("ESP_ROBOT");
+	if(result == true) {
+		Serial.println("Acces ponit Ready");
+	} else {
+		Serial.println("Acces ponit Failed!");
+	}
+	Serial.println(WiFi.localIP());
+}
+
 void WifiConnector::connect(char* ssid, char* password) {
 	Serial.print("Connecting to ");
 	Serial.println(ssid);
-	WiFi.hostname("robot"); 
+	WiFi.mode(WIFI_STA); //WiFi mode station (connect to wifi router only
 	WiFi.begin(ssid, password);
 	while (WiFi.status() != WL_CONNECTED) {
-		delay(500);
+		delay(250);
 		Serial.print(".");
 	}
 	// Print local IP address and start web server
-	Serial.println("");
-	Serial.println("WiFi connected.");
-	Serial.println("IP address: ");
+	WiFi.config(staticIP, gateway, subnet);
+	Serial.print("\nIP address: ");
 	Serial.println(WiFi.localIP());
 	server.begin();
+	Serial.println("");
+	Serial.println("WiFi connected.");
 }
 
 String WifiConnector::getRequest() {
 	String requestData  = req;
 	req = "";
 	return requestData;
+}
+
+void WifiConnector::setSpeedLeft(float spped) {
+	speedL = spped;
+}
+void WifiConnector::setSpeedRight(float spped) {
+	speedR = spped;
 }
 
 String WifiConnector::getPath() {

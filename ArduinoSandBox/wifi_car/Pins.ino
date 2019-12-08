@@ -3,17 +3,18 @@
 *
 * this uses the undocumented feature of Arduino - pins 14-19 correspond to analog 0-5
 ****************************************************************************************/
-//Buzzer 
-#define BUZZER_PIN 3
-//DistnceReaderController
-#define BAT_TRIG_PIN 12
-#define BAT_ECHO_PIN 11
+//if pin is LOW on boot then robot will connect to wifi otherwise will create AccessPoint 
+#define ACCESS_POINT_PINT 17 //SD3
 
 //MOTOR 
-#define MOTOR_1_SPREED_A_PIN D5
-#define MOTOR_1_TURN_1_PIN D6
-#define MOTOR_1_TURN_2_PIN D7 
-//MOTOR 2u
-#define MOTOR_2_SPREED_A_PIN D1
-#define MOTOR_2_TURN_1_PIN D2
-#define MOTOR_2_TURN_2_PIN D3
+#define MOTOR_R_TURN_1_PIN D1
+#define MOTOR_R_TURN_2_PIN D2
+	//HALL
+	#define MOTOR_R_HYALL_1_PIN D6
+	#define MOTOR_R_HYALL_2_PIN D7
+//MOTOR 2
+#define MOTOR_L_TURN_1_PIN D3
+#define MOTOR_L_TURN_2_PIN D4
+	//HALL
+	#define MOTOR_L_HYALL_1_PIN D3
+	#define MOTOR_L_HYALL_2_PIN D4
