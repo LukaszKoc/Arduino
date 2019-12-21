@@ -8,12 +8,13 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 
-#include <Pins.ino>
-#include <ArduinoUtilController.ino>
-#include <WifiConnector.ino>
-#include <MotorController.ino>
-#include <SpeedController.ino>
-#include <TankDriverController.ino>
+#include "Pins.ino"
+#include "ArduinoUtilController.ino"
+#include "WifiConnector.ino"
+#include "MotorController.ino"
+#include "SpeedController.ino"
+#include "TankDriverController.ino"
+#include "R2D2Controller.ino"
 
 ArduinoUtilController util;
 MotorController motorLeftController(MOTOR_L_TURN_1_PIN, MOTOR_L_TURN_2_PIN);
@@ -22,17 +23,18 @@ MotorController motorRightController(MOTOR_R_TURN_1_PIN, MOTOR_R_TURN_2_PIN);
 SpeedController speedController(MOTOR_R_HYALL_1_PIN, MOTOR_R_HYALL_2_PIN);
 
 TankDriverController tankDriver(motorLeftController,motorRightController);
+R2D2Controller r2D2Controller(R2D2_BUZZER);
 
 // Trojdena
-// char* ssid     = "UPCCF2D79F";
-// char* password = "N2nrcsz2fxbb";
+char* ssid     = "UPCCF2D79F";
+char* password = "N2nrcsz2fxbb";
 // Replace with your network credentials
 //Stokłosy 
 // char* ssid     = "UPCB3F388D";
 // char* password = "Phh4m2beyvGe";
 //telefon 
-char* ssid     = "use the route luke";
-char* password = "01234567";
+// char* ssid     = "use the route luke";
+// char* password = "01234567";
 
 int x, y;
 int tillStop = 1;
@@ -47,6 +49,7 @@ WifiConnector wifiConnector( setResponseHtmlDoc() );
 void setup() {
   Serial.begin(115200);
   speedController.setup();
+  r2D2Controller.setup();
   motorLeftController.setup();
   motorRightController.setup();
   tankDriver.stop();
@@ -54,11 +57,12 @@ void setup() {
   int a0 = analogRead(ACCESS_POINT_PINT);
   Serial.print("\nACCESS_POINT_PINT: ");
   Serial.println(a0);
-  if(a0 < 500) {
+  if(a0 > 500) {
     wifiConnector.openAccessPoint();
   } else {
     wifiConnector.connect(ssid, password);
   }
+  r2D2Controller.r2D2_tell();
 }
 
 String midString(String str, String start, String finish) {
