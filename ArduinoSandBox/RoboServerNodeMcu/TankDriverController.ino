@@ -10,7 +10,6 @@ class TankDriverController {
 		const String LEFT = "LEFT";
 		const String RIGHT = "RIGHT";
 		String calculateDirection(int arq);
-		void print(int y, int x );
 	public:
 		void drive(int x, int y);
 		void stop();
@@ -29,8 +28,6 @@ void TankDriverController::setup() {
 void TankDriverController::drive(int y, int x) {
 	stop();
 	delay(5);	
-
-	// print(y, x);
 	
 	int speedRight, speedLeft;
 	speedLeft = y;
@@ -75,13 +72,5 @@ void TankDriverController::stop() {
 String TankDriverController::calculateDirection(int turn) {
 	if(turn >= 0){ return RIGHT;}
 	return LEFT;
-}
-
-void TankDriverController::print(int y, int x ) {
-  Serial.print("result: " );
-  Serial.print(y );
-  Serial.print(" - " );
-  Serial.print(x );
-  Serial.print("\t\t");
 }
 #endif

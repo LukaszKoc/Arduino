@@ -1,7 +1,5 @@
-
 #ifndef R2D2Controller_h
 #define R2D2Controller_h 
-
 const int c = 261;
 const int d = 294;
 const int e = 329;
@@ -22,8 +20,6 @@ const int gH = 784;
 const int gSH = 830;
 const int aH = 880;
 
-const int ledPin1 = 4;  // Digital Pin 4
-const int ledPin2 = 6;  // Digital Pin 6 Built In Led can Change it if you want
 class R2D2Controller {
   private:
     int volume = 306;

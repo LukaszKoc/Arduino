@@ -53,14 +53,14 @@ void WifiConnector::activate() {
 	if (!client) {
 		return;
 	}
-	Serial.println("new client");
+	// Serial.println("new client");
 	while(!client.available()) {
 		delay(1);
 	}
 	// Read the first line of the request
 	req = client.readStringUntil('\r');
-	Serial.println();
-	Serial.println(req);
+	// Serial.println();
+	// Serial.println(req);
 	client.flush();
 
 	if (req.indexOf("GET") != -1) {

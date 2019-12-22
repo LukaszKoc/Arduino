@@ -8,7 +8,6 @@ class MotorController {
 		int input1, input2, speed_pin;
 		ArduinoUtilController util;
 		void changeDirection(boolean isForward);
-		void display(int x);
 		void drive(boolean isForward, int speed);
 	public:
 		void setup();
@@ -53,10 +52,4 @@ void MotorController::drive(boolean isForward, int speed = 1024) {
 	}
 }
 
-
-
-void MotorController::display(int x) {
-	Serial.print("\n\tMotor:\t");
-	Serial.print(x);
-}
 #endif

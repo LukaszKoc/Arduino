@@ -6,17 +6,16 @@
 //if pin is LOW on boot then robot will connect to wifi otherwise will create AccessPoint 
 
 #define ACCESS_POINT_PINT 17 //SD3
-#define R2D2_BUZZER D7
 
 //MOTOR 
-#define MOTOR_R_TURN_1_PIN D1
-#define MOTOR_R_TURN_2_PIN D2
+#define MOTOR_R_TURN_1_PIN D5
+#define MOTOR_R_TURN_2_PIN D6
 	//HALL
-	#define MOTOR_R_HYALL_1_PIN D5
-	#define MOTOR_R_HYALL_2_PIN D6
+	#define MOTOR_R_HYALL_1_PIN D1
+	#define MOTOR_R_HYALL_2_PIN D2
 //MOTOR 2
-#define MOTOR_L_TURN_1_PIN D3
-#define MOTOR_L_TURN_2_PIN D4
+#define MOTOR_L_TURN_1_PIN D7
+#define MOTOR_L_TURN_2_PIN D8
 	//HALL
-	#define MOTOR_L_HYALL_1_PIN D7
-	#define MOTOR_L_HYALL_2_PIN D8
+	#define MOTOR_L_HYALL_1_PIN D3
+	#define MOTOR_L_HYALL_2_PIN D4
