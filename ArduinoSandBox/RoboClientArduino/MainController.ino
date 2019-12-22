@@ -6,42 +6,37 @@
 
 // Load Wi-Fi library
 #include <Arduino.h>
-#include <SoftwareSerial.h>
 
-#include "ArduinoPins.ino"
-#include "SpeedController.ino"
-#include "R2D2Controller.ino"
-#include "SerialLinkController.ino"
+#include <PinsArduino.h>
+#include <SerialLink.h>
+#include <SpeedControl.h>
+#include <SoundsGenerator.h>
 
-SpeedController speedController(MOTOR_L_HYALL_1_PIN, MOTOR_L_HYALL_2_PIN, MOTOR_R_HYALL_1_PIN, MOTOR_R_HYALL_2_PIN);
-R2D2Controller r2D2Controller(AR2D2_BUZZER);
-SerialLinkController serialLinkController;
+SpeedControl speedControl(MOTOR_L_HYALL_1_PIN, MOTOR_L_HYALL_2_PIN, MOTOR_R_HYALL_1_PIN, MOTOR_R_HYALL_2_PIN);
+SoundsGenerator soundsGenerator(AR2D2_BUZZER);
+SerialLink serialLink;
 
 int x, y, speedL, speedR;
 
 void setup() {
 	Serial.begin(115200);
-	espSerial.begin(1152000);
-	speedController.setup();
+	serialLink.setup(1152000);
+	speedControl.setup();
 	randomSeed(analogRead(RANDOM_GENERATOR_PIN));
-	while (!Serial) {
-		delay(10); // wait for serial port to connect. Needed for Native USB only
-	}		
- 	espSerial.flush();
- 	r2D2Controller.r2D2_tell();
+ 	soundsGenerator.r2D2_tell();
 	Serial.println("READY");
 }
 
 void loop() {
-	serialLinkController.readMessage(x, y); 
-	serialLinkController.writeCurrentSpeed(speedController.getSpeedL(), speedController.getSpeedR());
+	serialLink.readMessage(x, y); 
+	serialLink.writeCurrentSpeed(speedControl.getSpeedL(), speedControl.getSpeedR());
 
-	Serial.println(String(x) + ": " + y);
+	Serial.println( String(serialLink.readMessage()));
     doSaySomething();
 }
 
 void doSaySomething() {
 	if(speedL == 0.00 || speedR == 0.00 )
 		if(random(100) < 10)
-			r2D2Controller.r2D2_rand();
+			soundsGenerator.r2D2_tell();
 }

@@ -5,26 +5,23 @@
 *********/
 
 // Load Wi-Fi library
-#include <SerialLinkController.h>
 #include <Arduino.h>
 #include <SoftwareSerial.h>
+#include "PinsNodeMCU.h"
 
-#include "Pins.ino"
-#include "ArduinoUtilController.ino"
-#include "WifiConnector.ino"
-#include "MotorController.ino"
-#include "SpeedController.ino"
-#include "TankDriverController.ino"
-#include "R2D2Controller.ino"
+#include <SerialLink.h>
+#include "ArduinoUtil.h"
+#include "WifiConnector.h"
+#include "MotorControl.h"
+#include "TankDriver.h"
+#include "SoundsGenerator.h"
 
-ArduinoUtilController util;
-MotorController motorLeftController(MOTOR_L_TURN_1_PIN, MOTOR_L_TURN_2_PIN);
-MotorController motorRightController(MOTOR_R_TURN_1_PIN, MOTOR_R_TURN_2_PIN);
+ArduinoUtil util;
+MotorControl motorLeftController(MOTOR_L_TURN_1_PIN, MOTOR_L_TURN_2_PIN);
+MotorControl motorRightController(MOTOR_R_TURN_1_PIN, MOTOR_R_TURN_2_PIN);
 
-SpeedController speedController(MOTOR_L_HYALL_1_PIN, MOTOR_L_HYALL_2_PIN, MOTOR_R_HYALL_1_PIN, MOTOR_R_HYALL_2_PIN);
-
-TankDriverController tankDriver(motorLeftController,motorRightController);
-
+TankDriver tankDriver(motorLeftController,motorRightController);
+SerialLink serialLink;
 // Trojdena
 char* ssid     = "UPCCF2D79F";
 char* password = "N2nrcsz2fxbb";
@@ -48,7 +45,6 @@ WifiConnector wifiConnector( setResponseHtmlDoc() );
 
 void setup() {
   Serial.begin(115200);
-  speedController.setup();
   motorLeftController.setup();
   motorRightController.setup();
   tankDriver.stop();
@@ -66,9 +62,7 @@ void loop() {
   String headerData = wifiConnector.getRequest();
   if(headerData != NULL && headerData.indexOf("joystickCoords") != -1) {
     requestCallback(headerData);
-    float speedL = speedController.getSpeedL();
-    float speedR = speedController.getSpeedR();
-    wifiConnector.setSpeedLeft(speedL);
+    // wifiConnector.setSpeedLeft(speedL);
     String msg = String("DIRESTIONS:")+ x + ";" + y + ".";
     Serial.println(msg);
     tankDriver.drive(y, x);
