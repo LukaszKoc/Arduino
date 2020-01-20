@@ -6,7 +6,7 @@
 
 #define DC_FREQUENCY 400720
 #define DC_RANGE 10240
-// Load Wi-Fi library
+#include <ArduinoUtil.h>
 #include "PinsNodeMCU.h"
 
 #include <SerialLinkESP.h>
@@ -29,10 +29,16 @@ WifiConnector wifiConnector( setResponseHtmlDoc() );
 char* ssid     = "FEROmedia_13907";
 char* password = "BorysBestia00";
 char* adresses[][2] = {
-  {"FEROmedia_13907", "BorysBestia00"},// Przywory
-  {"UPCCF2D79F", "N2nrcsz2fxbb"}, //trojdena
-  {"UPCB3F388D", "Phhe4m2beyvGe"},
-  {"use the route luke", "01234567"}
+//{nettName, pass}
+ {"FEROmedia_13907", "BorysBestia00"},  //przywory
+ {"UPCCF2D79F", "N2nrcsz2fxbb"},  // Trojdena
+ {"UPCB3F388D", "Phhe4m2beyvGe"},
+ {"use the route luke", "01234567"}, //telefon
+};
+IPAddress staticIps[][3] = {
+//{gateway, subnet, staticIP}
+ {IPAddress(192, 168, 1, 100), IPAddress(255, 255, 255, 0), IPAddress(192, 168, 1, 140)},//przywory
+ {IPAddress(192, 168, 0, 100), IPAddress(255, 255, 255, 0), IPAddress(192, 168, 1, 140)}//Trojdena
 };
 
 int x, y, speedL, speedR;
@@ -49,7 +55,7 @@ void setup() {
   if(a0 > 500) {
     wifiConnector.openAccessPoint();
   } else {
-    wifiConnector.connect(adresses[1][0], adresses[1][1]);
+    wifiConnector.connect(adresses, staticIps);
   }
   // serialLink.setup();
   Serial.println("ESP ready:");
