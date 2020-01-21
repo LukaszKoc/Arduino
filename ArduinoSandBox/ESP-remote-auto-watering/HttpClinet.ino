@@ -112,10 +112,11 @@ String getResourcesReprtJsonMsg() {
 	array = jsonArrayPopulate(array, "sensor", 1, "value", String(soilMoistureALOES));
 	array = jsonArrayPopulate(array, "sensor", 2, "value", String(soilMoistureMINT));
 	array = jsonArrayPopulate(array, "sensor", 3, "value", String(soilMoistureBURO));
+	array = jsonArrayPopulate(array, "sensor", 7, "value", String(soilMoisturePLANT1));
+	array = jsonArrayPopulate(array, "sensor", 8, "value", String(soilMoisturePLANT2));
+
 	array = jsonArrayPopulate(array, "sensor", 4, "value", String(airTemperature));
 	array = jsonArrayPopulate(array, "sensor", 5, "value", String(airHumidity));
 	array = jsonArrayPopulate(array, "sensor", 6, "value", String(computeHeatIndex));
-	array = jsonArrayPopulate(array, "sensor", 7, "value", String(soilMoisturePLANT1));
-	array = jsonArrayPopulate(array, "sensor", 8, "value", String(soilMoisturePLANT2));
 	return jsonArraySerialize();
 }

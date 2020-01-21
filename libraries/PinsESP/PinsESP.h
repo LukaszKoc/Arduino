@@ -5,6 +5,7 @@
 	#define SOID_MOISTURE_A_PLANT_1 14
 	#define SOID_MOISTURE_A_PLANT_2 12
 	#define DHT_PIN_D 33
+	#define BLUE_LED_D GPIO_NUM_2
 #elif defined(ESP8266)
 	#define DHT_PIN_D D6
 	#define SOID_MOISTURE_D D7
