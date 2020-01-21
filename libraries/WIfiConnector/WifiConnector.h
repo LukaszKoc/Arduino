@@ -1,9 +1,6 @@
-#include <ESP8266WiFi.h>
-
 #ifndef WifiConnector_h
 #define WifiConnector_h 
 #define port 80
-WiFiServer server(port);
 //TODO create connection List htstName/pass/IPs
 
 
@@ -16,14 +13,14 @@ class WifiConnector {
 		String responseDoc;
 		unsigned long currentTime = millis();
 		unsigned long previousTime = 0; 
-		long timeoutTime = 2000;
+		long timeoutTime = 5000;
 		String getResponseStatus(int code);
 		void configWiFi();
 	public:
 		WiFiClient client;
 		void openAccessPoint();
-		bool connect(char* ssid, char* password);
-		void connect(char* adresses[][2], IPAddress staticIps[][3]);
+		bool connect(String ssid, String password);
+		void connect(String adresses[][4], IPAddress staticIps[][4]);
 		void setup();
 		void activate();
 		String getRequest();
@@ -44,29 +41,6 @@ class WifiConnector {
 }; 
 
 void WifiConnector::setup() {
-}
-
-
-void WifiConnector::activate() {
-	client = server.available();
-	if (!client) {
-		return;
-	}
-	//Serial.println("new client");
-	while(!client.available()) {
-		delay(1);
-	}
-	// Read the first line of the request
-	req = client.readStringUntil('\r');
-	//Serial.println();
-	//Serial.println(req);
-	client.flush();
-
-	if (req.indexOf("GET") != -1) {
-		doResponce();					
-	} else {
-		doResponce(200);
-	}
 }
 
 void  WifiConnector::doResponce() {
@@ -97,7 +71,6 @@ String WifiConnector::getResponseStatus(int code) {
 
 void WifiConnector::openAccessPoint() {
 	//Serial.println("Setting soft-AP ... ");
-	WiFi.hostname("robot-wifi");
   	WiFi.mode(WIFI_AP_STA);
 	boolean result = 
 		// WiFi.softAPConfig(staticIP, gateway, subnet) && 
@@ -110,7 +83,7 @@ void WifiConnector::openAccessPoint() {
 	//Serial.println(WiFi.localIP());
 }
 
-void WifiConnector::connect(char* adresses[][2], IPAddress staticIps[][3]) {
+void WifiConnector::connect(String adresses[][4], IPAddress staticIps[][4]) {
 	WiFi.mode(WIFI_STA); //WiFi mode station (connect to wifi router only
 	for (int i=0; i< sizeof(adresses); i++){
 		Serial.println("Connecting: ");Serial.print(adresses[i][0]); 
@@ -118,17 +91,17 @@ void WifiConnector::connect(char* adresses[][2], IPAddress staticIps[][3]) {
 			WiFi.config(staticIps[i][2], staticIps[i][1], staticIps[i][0]);
 			Serial.print("\nIP address: ");
 			Serial.println(WiFi.localIP());
-			server.begin();
 			Serial.println("");
 			Serial.println("WiFi connected.");
 			return;
 		}
+		Serial.println();
 	}
 }
 
-bool WifiConnector::connect(char* ssid, char* password) {
-	WiFi.begin(ssid, password);
-	int timeout = millis() + 15000; 
+bool WifiConnector::connect(String ssId, String password) {
+	WiFi.begin(ssId.c_str(), password.c_str());
+	int timeout = millis() + timeoutTime; 
 	for ( int i = millis(); millis() < timeout;) {
 		wait(250);
 		if(WiFi.status() == WL_CONNECTED) { 
